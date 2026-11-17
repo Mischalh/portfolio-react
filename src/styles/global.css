@@ -1,0 +1,1106 @@
+/* =========================================================================
+   Eén stylesheet, opgedeeld in blokken.
+   Waarom geen CSS-framework: de huisstijl is klein en eigen; een framework
+   zou vooral code toevoegen die je niet gebruikt.
+   Waarom gedeelde classes (.card, .btn, .tag): dezelfde stijl staat zo maar
+   één keer in de CSS, in plaats van per component opnieuw.
+   ========================================================================= */
+
+/* 1. Design tokens: kleuren, fonts en maten op één plek ------------------- */
+:root {
+  --purple: #4831d4;
+  --lime: #ccf381;
+  --deep: #25196e;
+  --ink: #1b1340;
+  --text: #3d3766;
+  --muted: #5a5480;
+  --soft: #c9c4e8;
+  --on-purple: #e3dfff;
+  --bg: #f5f6ff;
+  --surface: #ffffff;
+  --tint: #edebff;
+  --line: #d8d4ee;
+
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-head: 'Space Grotesk', 'Inter', sans-serif;
+
+  --border: 3px solid var(--deep);
+  --shadow: 12px 12px 0 var(--lime); /* het "tweede vierkant" achter kaarten */
+  --shadow-sm: 5px 5px 0 var(--lime);
+  --gutter: clamp(16px, 4vw, 24px);
+  --section: clamp(64px, 9vw, 112px);
+}
+
+/* 2. Basis ---------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.6;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: var(--purple);
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--font-head);
+  line-height: 1.1;
+  color: var(--deep);
+}
+
+p {
+  margin: 0;
+}
+
+ul,
+ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+:focus-visible {
+  outline: 3px solid var(--lime);
+  outline-offset: 3px;
+}
+
+/* 3. Layout-hulpmiddelen ---------------------------------------------------- */
+/* Vaste ruimte tussen de laatste sectie en de footer, op elke pagina gelijk. */
+main {
+  padding-bottom: var(--section);
+}
+
+main > .section:last-child {
+  padding-bottom: 0;
+}
+
+.container {
+  width: min(1200px, 100% - 2 * var(--gutter));
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: var(--section);
+}
+
+.section--tight {
+  padding-block: 48px 0;
+}
+
+.section--flush-top {
+  padding-top: 0;
+}
+
+.section--white {
+  background: var(--surface);
+  border-block: var(--border);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.section-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.02em;
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--purple);
+}
+
+.lead {
+  margin-top: 14px;
+  font-size: 1.1rem;
+  line-height: 1.75;
+  color: var(--text);
+}
+
+/* 4. Gedeelde componenten --------------------------------------------------- */
+
+/* Kaart: witte vlak + donkere rand + verschoven limoen vlak erachter. */
+.card {
+  background: var(--surface);
+  border: var(--border);
+  box-shadow: var(--shadow);
+  margin-right: 12px; /* ruimte voor de schaduw, zodat er niets buiten beeld valt */
+}
+
+.card--purple {
+  background: var(--purple);
+  color: var(--on-purple);
+}
+
+.card--purple h2,
+.card--purple h3 {
+  color: var(--lime);
+}
+
+/* Knoppen */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 12px 24px;
+  border: 2px solid transparent;
+  font: 700 1rem var(--font-body);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn:hover {
+  transform: translate(-2px, -2px);
+}
+
+.btn--purple {
+  background: var(--purple);
+  color: #fff;
+  border-color: var(--deep);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn--lime {
+  background: var(--lime);
+  color: var(--deep);
+  box-shadow: 5px 5px 0 #fff;
+}
+
+.btn--outline {
+  border-color: var(--deep);
+  color: var(--deep);
+}
+
+.btn--outline-light {
+  border-color: #fff;
+  color: #fff;
+}
+
+.btn--text {
+  padding-inline: 0;
+  color: var(--purple);
+}
+
+/* Een hele kaart als link (Over mij → Contact). */
+.btn--card {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 32px;
+  background: var(--purple);
+  color: #fff;
+  border: var(--border);
+  box-shadow: var(--shadow);
+  margin-right: 12px;
+}
+
+.btn--card .cta__title {
+  font-size: 1.6rem;
+}
+
+/* Tags */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  padding: 5px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--deep);
+}
+
+.tag--outline {
+  border: 2px solid var(--purple);
+}
+
+.tag--soft {
+  border: 2px solid var(--line);
+  background: var(--bg);
+  font-weight: 500;
+  color: var(--text);
+}
+
+/* Badge "Scrimba" / "School" */
+.badge {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 5px 10px;
+  border: 2px solid var(--deep);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.badge--scrimba {
+  background: var(--lime);
+  color: var(--deep);
+}
+
+.badge--school {
+  background: var(--purple);
+  color: #fff;
+}
+
+/* Twee vierkanten. Kleuren via CSS, zodat één SVG overal past. */
+.double-square {
+  flex: none;
+  overflow: visible;
+}
+
+.double-square rect {
+  stroke: var(--lime);
+  stroke-width: 12;
+}
+
+.double-square__back {
+  fill: none;
+}
+
+.double-square__front {
+  fill: var(--purple);
+}
+
+.double-square--large {
+  width: min(380px, 100%);
+}
+
+.double-square--small {
+  width: 150px;
+}
+
+.double-square--icon {
+  width: 24px;
+}
+
+.double-square--icon rect {
+  stroke: var(--purple);
+  stroke-width: 24;
+}
+
+.double-square--icon .double-square__front {
+  fill: var(--bg);
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--purple);
+}
+
+/* Afbeelding in een kaart-kader */
+.media-frame {
+  margin-block: 0;
+  margin-left: 0;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--tint);
+}
+
+.media-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.media-frame--cover {
+  aspect-ratio: 16 / 9;
+}
+
+.media-frame--cover img {
+  object-fit: cover;
+  object-position: top;
+}
+
+.text-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 28px;
+}
+
+.text-card__title {
+  font-size: 1.35rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: 32px;
+}
+
+/* 5. Header & footer -------------------------------------------------------- */
+.site-header {
+  background: var(--purple);
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 24px;
+}
+
+.logo {
+  align-self: flex-start; /* voorkomt dat flexbox het logo uitrekt */
+  height: 48px;
+  width: auto;
+}
+
+.logo--small {
+  height: 36px;
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav__link {
+  display: block;
+  padding: 12px 14px;
+  border-bottom: 3px solid transparent;
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.nav__link.active {
+  color: var(--lime);
+  border-bottom-color: var(--lime);
+}
+
+.nav__cta {
+  margin-left: 8px;
+  box-shadow: 4px 4px 0 var(--deep);
+}
+
+.nav__toggle {
+  display: none;
+}
+
+/* Mobiel menu: onder 760px klapt de navigatie in achter een knop. */
+@media (max-width: 760px) {
+  .nav__toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 48px;
+    height: 48px;
+    padding: 12px;
+    border: 0;
+    background: var(--lime);
+    box-shadow: 3px 3px 0 var(--deep);
+    cursor: pointer;
+  }
+
+  .nav__toggle-bar {
+    height: 3px;
+    background: var(--deep);
+  }
+
+  .nav__links {
+    display: none;
+    flex-basis: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    padding-top: 8px;
+  }
+
+  .nav__links.is-open {
+    display: flex;
+  }
+
+  .nav__link {
+    font-family: var(--font-head);
+    font-size: 1.75rem;
+    font-weight: 700;
+    border-bottom: 2px solid rgb(204 243 129 / 0.35);
+  }
+
+  .nav__cta {
+    margin: 16px 0 8px;
+  }
+}
+
+.site-footer {
+  padding-block: 64px 32px;
+  background: var(--deep);
+  border-top: 12px solid var(--lime);
+  color: var(--soft);
+}
+
+.site-footer a {
+  color: var(--soft);
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: var(--lime);
+}
+
+.site-footer__grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.site-footer__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 360px;
+}
+
+.site-footer__title {
+  margin-bottom: 12px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--lime);
+}
+
+.site-footer__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.site-footer__copy {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid rgb(255 255 255 / 0.15);
+  font-size: 14px;
+}
+
+/* 6. Hero's ----------------------------------------------------------------- */
+.hero,
+.page-hero {
+  background: var(--purple);
+  border-bottom: 25px solid var(--lime);
+  color: var(--on-purple);
+}
+
+.hero__inner,
+.page-hero__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+}
+
+.hero__inner {
+  padding-block: 48px 96px;
+}
+
+.hero__text {
+  flex: 1 1 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.hero__title {
+  font-size: clamp(2.75rem, 7vw, 5rem);
+  letter-spacing: -0.03em;
+  color: var(--lime);
+}
+
+.hero__intro {
+  max-width: 520px;
+  font-size: 1.2rem;
+}
+
+.hero__intro strong {
+  color: #fff;
+}
+
+.hero__contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  padding-top: 12px;
+  border-top: 2px solid rgb(204 243 129 / 0.35);
+}
+
+.hero__contact a {
+  display: block;
+  padding-block: 10px;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.hero .double-square {
+  margin-inline: auto;
+}
+
+.page-hero__inner {
+  padding-block: 40px 72px;
+}
+
+.page-hero__text {
+  flex: 1 1 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.page-hero__title {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  letter-spacing: -0.03em;
+  color: var(--lime);
+}
+
+.page-hero__intro {
+  max-width: 560px;
+  font-size: 1.15rem;
+}
+
+.back-link {
+  align-self: flex-start;
+  padding-block: 8px;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Op een telefoon is de decoratie vooral ruimte: kleiner in de hero, weg in de rest. */
+@media (max-width: 600px) {
+  .hero .double-square {
+    width: min(220px, 70%);
+  }
+
+  .page-hero .double-square,
+  .cta .double-square {
+    display: none;
+  }
+}
+
+/* 7. Pagina-specifieke onderdelen ------------------------------------------- */
+
+/* Home */
+.skills-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 32px;
+  padding: 32px;
+}
+
+.skill-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: var(--text);
+}
+
+.skill-card {
+  padding: 32px;
+}
+
+.certificate-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px 28px;
+  padding: 24px 32px;
+  background: var(--deep);
+  color: var(--soft);
+  text-decoration: none;
+}
+
+.certificate-banner__image {
+  width: 84px;
+  border: 3px solid var(--lime);
+}
+
+.certificate-banner__text {
+  flex: 1 1 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.certificate-banner__title {
+  font-family: var(--font-head);
+  font-size: 1.4rem;
+  color: #fff;
+}
+
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding: clamp(32px, 6vw, 72px);
+}
+
+.cta__text {
+  flex: 1 1 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.cta__eyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lime);
+}
+
+.cta__title {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.02em;
+}
+
+.cta__intro {
+  font-size: 1.1rem;
+}
+
+/* Projectkaarten */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
+  gap: 40px 28px;
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.project-card__media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--tint);
+  border-bottom: var(--border);
+}
+
+.project-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.project-card__media .badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+}
+
+.project-card__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+  color: var(--text);
+}
+
+.project-card__title {
+  font-size: 1.5rem;
+}
+
+.project-card__link {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+/* Filter op Mijn werk */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.filter-bar__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.filter-button {
+  min-height: 48px;
+  padding: 10px 18px;
+  border: 2px solid var(--deep);
+  background: var(--surface);
+  color: var(--deep);
+  font: 600 15px var(--font-body);
+  cursor: pointer;
+}
+
+.filter-button[aria-pressed='true'] {
+  background: var(--purple);
+  color: #fff;
+  box-shadow: 4px 4px 0 var(--lime);
+}
+
+.filter-bar__count {
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* Projectpagina */
+.project-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 48px;
+  margin: 0 0 40px;
+}
+
+.project-meta dt {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.project-meta dd {
+  margin: 0;
+  font-weight: 700;
+  color: var(--deep);
+}
+
+.project-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 48px;
+}
+
+.project-body > .stack {
+  flex: 999 1 520px;
+  min-width: 0;
+}
+
+.project-aside {
+  flex: 1 1 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 28px;
+}
+
+.two-up {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 28px;
+  color: var(--text);
+}
+
+.two-up .card--purple {
+  color: var(--on-purple);
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 28px;
+}
+
+.steps__item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px;
+  box-shadow: none;
+  color: var(--text);
+}
+
+.steps__number {
+  font-family: var(--font-head);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--purple);
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  gap: 40px 28px;
+}
+
+/* Over mij */
+.about {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 64px;
+}
+
+.about__photo {
+  flex: 1 1 280px;
+  max-width: 400px;
+  aspect-ratio: 4 / 5;
+}
+
+.about__photo img {
+  object-fit: cover;
+}
+
+.about__text {
+  flex: 999 1 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-size: 1.1rem;
+  line-height: 1.75;
+  color: var(--text);
+}
+
+.quote {
+  margin: 8px 12px 0 0;
+  padding: 28px 32px;
+  font-family: var(--font-head);
+  font-size: 1.35rem;
+  line-height: 1.45;
+  color: #fff;
+}
+
+.quote span {
+  color: var(--lime);
+}
+
+.timeline {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 32px;
+}
+
+.timeline__item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--text);
+}
+
+.timeline__item .double-square--icon {
+  width: 40px;
+}
+
+.timeline__item .double-square__front {
+  fill: var(--surface);
+}
+
+.timeline__period {
+  font-weight: 700;
+  color: var(--purple);
+}
+
+.certificate {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.certificate__image {
+  flex: 1 1 260px;
+  max-width: 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  background: var(--tint);
+}
+
+.certificate__image img {
+  width: 100%;
+  max-width: 240px;
+  border: var(--border);
+}
+
+.certificate__body {
+  flex: 999 1 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: clamp(24px, 4vw, 44px);
+  color: var(--text);
+}
+
+.certificate__title {
+  font-size: 2rem;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+/* dt staat in de HTML eerst (goed voor schermlezers); visueel komt het getal bovenaan. */
+.stats__item {
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 14px 16px;
+  border: var(--border);
+}
+
+.stats__item dd {
+  margin: 0;
+  font-family: var(--font-head);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--purple);
+}
+
+.stats__item dt {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* Contact */
+.contact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 40px;
+}
+
+.contact__form {
+  flex: 999 1 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: clamp(24px, 4vw, 48px);
+}
+
+.contact__form .btn {
+  align-self: flex-start;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field label {
+  font-weight: 700;
+  color: var(--deep);
+}
+
+.field input,
+.field textarea {
+  padding: 14px 16px;
+  border: 2px solid var(--deep);
+  border-radius: 0;
+  background: var(--bg);
+  font: 16px var(--font-body);
+  color: var(--ink);
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.contact__aside {
+  flex: 1 1 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.contact-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 20px 24px;
+  box-shadow: none;
+  color: var(--deep);
+  text-decoration: none;
+}
+
+.contact-card__label {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.contact-card__value {
+  overflow-wrap: anywhere;
+}
+
+.contact-card--socials {
+  flex-grow: 1;
+  gap: 14px;
+  box-shadow: var(--shadow);
+}
+
+.social-link {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: #fff;
+  color: var(--deep);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* 8. Minder beweging voor wie dat heeft ingesteld --------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+}
